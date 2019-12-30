@@ -1,13 +1,18 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { 
+  BrowserRouter as Router, 
+  Route, 
+  Redirect, 
+  Switch 
+} from 'react-router-dom';
 
 // CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 // Pages
-import Users from './pages/Users'
-import Basket from './pages/Basket'
+import Users from './user/pages/Users'
+import Basket from './baskets/pages/Basket'
 
 // Components
 
