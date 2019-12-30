@@ -68,5 +68,17 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
 ### `npm init react-app client`
+
+Setup SPA(Single Page Application)
+
 ### `npm install react-bootstrap bootstrap --save`
+
+Install bootstrap 
+
 ### `npm install --save react-router-dom`
+
+Install Routers
+
+### `npm install ---save react-transition-group`
+
+Install Transitions and Animations

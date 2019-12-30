@@ -11,8 +11,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 // Pages
+import MainNavigation from './shared/components/Navigation/MainNavigation'
 import Users from './user/pages/Users'
-import Basket from './baskets/pages/Basket'
+import Basket from './products/pages/Product'
 
 // Components
 
@@ -20,15 +21,18 @@ import Basket from './baskets/pages/Basket'
 const App = () => {
   return (
     <Router>
-      <Switch>
-        <Route path="/" exact>
-          <Users />
-        </Route>
-        <Route path="/baskets/new" exact>
-          <Basket />
-        </Route>
-        <Redirect to="/" />
-      </Switch>
+      <MainNavigation />
+      <main>
+        <Switch>
+          <Route path="/" exact>
+            <Users />
+          </Route>
+          <Route path="/products/new" exact>
+            <Basket />
+          </Route>
+          <Redirect to="/" />
+        </Switch>
+      </main>
     </Router>
   )
 };
