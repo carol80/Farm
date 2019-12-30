@@ -1,11 +1,32 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+
+// CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
-function App() {
+// Pages
+import Users from './pages/Users'
+import Basket from './pages/Basket'
+
+// Components
+
+
+const App = () => {
   return (
-    <h1> hi </h1>
-  );
-}
+    <Router>
+      <Switch>
+        <Route path="/" exact>
+          <Users />
+        </Route>
+        <Route path="/baskets/new" exact>
+          <Basket />
+        </Route>
+        <Redirect to="/" />
+      </Switch>
+    </Router>
+  )
+};
+
 
 export default App;

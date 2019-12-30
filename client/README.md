@@ -69,3 +69,4 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 npm init react-app client
 npm install react-bootstrap bootstrap --save
+npm install --save react-router-dom
