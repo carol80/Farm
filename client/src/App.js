@@ -12,7 +12,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // Pages
 import MainNavigation from './shared/components/Navigation/MainNavigation'
 import Users from './user/pages/Users'
-import Basket from './products/pages/Product'
+import NewProduct from './products/pages/NewProduct'
 import UserProducts from './products/pages/UserProducts';
 
 
@@ -32,7 +32,7 @@ const App = () => {
             <UserProducts />
           </Route>
           <Route path="/products/new" exact>
-            <Basket />
+            <NewProduct />
           </Route>
           <Redirect to="/" />
         </Switch>
