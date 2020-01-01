@@ -1,15 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
-import { 
-    VALIDATOR_REQUIRE, 
-    VALIDATOR_MINLENGTH 
+import {
+  VALIDATOR_REQUIRE,
+  VALIDATOR_MINLENGTH
 } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
-
+import Card from '../../shared/components/UIElements/Card';
 import './ProductForm.css';
+
 
 const DUMMY_PRODUCTS = [
     {
@@ -31,62 +32,95 @@ const DUMMY_PRODUCTS = [
 ];
 
 const UpdateProduct = () => {
+    const [isLoading, setIsLoading] = useState(true);
     const productId = useParams().productId;
-
-    const identifiedProduct = DUMMY_PRODUCTS.find(p => p.id === productId);
-
-    const [formState, inputHandler] = useForm({
+  
+    const [formState, inputHandler, setFormData] = useForm(
+      {
         title: {
-            value: identifiedProduct.title,
-            isValid: true
+          value: '',
+          isValid: false
         },
         description: {
-            value: identifiedProduct.description,
-            isValid: true
+          value: '',
+          isValid: false
         }
-    }, true);
-
-    const productUpdateSubmitHandler = event => {
-        event.preventDefault();
-        console.log(formState.inputs);
-    }
-
-    if (!identifiedProduct) {
-        return (
-        <div className="center">
-            <h2>Could not find product</h2>
-        </div>
+      },
+      false
+    );
+  
+    const identifiedProduct = DUMMY_PRODUCTS.find(p => p.id === productId);
+  
+    useEffect(() => {
+      if (identifiedProduct) {
+        setFormData(
+          {
+            title: {
+              value: identifiedProduct.title,
+              isValid: true
+            },
+            description: {
+              value: identifiedProduct.description,
+              isValid: true
+            }
+          },
+          true
         );
+      }
+      setIsLoading(false);
+    }, [setFormData, identifiedProduct]);
+  
+    const productUpdateSubmitHandler = event => {
+      event.preventDefault();
+      console.log(formState.inputs);
+    };
+  
+    if (!identifiedProduct) {
+      return (
+        <div className="center">
+          <Card>
+            <h2>Could not find product!</h2>
+          </Card>
+        </div>
+      );
     }
-
+  
+    if (isLoading) {
+      return (
+        <div className="center">
+          <h2>Loading...</h2>
+        </div>
+      );
+    }
+  
     return (
-        <form className="product-form" onSubmit={productUpdateSubmitHandler}>
-            <Input 
-                id="title" 
-                element="input" 
-                type="text" 
-                label="Title" 
-                validators={[VALIDATOR_REQUIRE()]}
-                errorText="Please enter a valid title."
-                onInput={inputHandler}
-                initialValue={formState.inputs.title.value}
-                initialValid={formState.inputs.title.isValid}
-            />
-            <Input 
-                id="description" 
-                element="textarea" 
-                label="Description" 
-                validators={[VALIDATOR_MINLENGTH(5)]}
-                errorText="Please enter a valid dexcription (min. 5 characters)."
-                onInput={inputHandler}
-                initialValue={formState.inputs.description.value}
-                initialValid={formState.inputs.description.isValid}
-            />
-            <Button type="submit" disabled={!formState.isValid}>
-                UPDATE PRODUCT
-            </Button>
-        </form>
-    )
+      <form className="product-form" onSubmit={productUpdateSubmitHandler}>
+        <Input
+          id="title"
+          element="input"
+          type="text"
+          label="Title"
+          validators={[VALIDATOR_REQUIRE()]}
+          errorText="Please enter a valid title."
+          onInput={inputHandler}
+          initialValue={formState.inputs.title.value}
+          initialValid={formState.inputs.title.isValid}
+        />
+        <Input
+          id="description"
+          element="textarea"
+          label="Description"
+          validators={[VALIDATOR_MINLENGTH(5)]}
+          errorText="Please enter a valid description (min. 5 characters)."
+          onInput={inputHandler}
+          initialValue={formState.inputs.description.value}
+          initialValid={formState.inputs.description.isValid}
+        />
+        <Button type="submit" disabled={!formState.isValid}>
+          UPDATE PRODUCT
+        </Button>
+    </form>
+    );
 };
 
 export default UpdateProduct;

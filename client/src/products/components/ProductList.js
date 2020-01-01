@@ -2,6 +2,7 @@ import React from 'react';
 
 import Card from '../../shared/components/UIElements/Card';
 import ProductItem from './ProductItem';
+import Button from '../../shared/components/FormElements/Button';
 
 import './ProductList.css';
 
@@ -10,7 +11,7 @@ const ProductList = props => {
         return <div className="product-list center">
             <Card>
                 <h2>No products found. Maybe add one?</h2>
-                <button>Share Product</button>
+                <Button to="/products/new">Share Product</Button>
             </Card>
         </div>
     }
