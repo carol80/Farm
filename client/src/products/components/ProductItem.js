@@ -19,7 +19,7 @@ const ProductItem = props => {
                     </div>
                     <div className="product-item__actions">
                         <Button inverse>VIEW </Button>
-                        <Button to={`/places/${props.id}`}>EDIT </Button>
+                        <Button to={`/products/${props.id}`}>EDIT </Button>
                         <Button danger>DELETE</Button>
                     </div>
                 </Card>

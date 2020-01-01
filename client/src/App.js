@@ -14,7 +14,7 @@ import MainNavigation from './shared/components/Navigation/MainNavigation'
 import Users from './user/pages/Users'
 import NewProduct from './products/pages/NewProduct'
 import UserProducts from './products/pages/UserProducts';
-
+import UpdateProduct from './products/pages/UpdateProduct';
 
 // Components
 
@@ -33,6 +33,9 @@ const App = () => {
           </Route>
           <Route path="/products/new" exact>
             <NewProduct />
+          </Route>
+          <Route path="/products/:productId">
+            <UpdateProduct />
           </Route>
           <Redirect to="/" />
         </Switch>
