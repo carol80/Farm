@@ -25,6 +25,10 @@ const NewProduct = () => {
     quantity: {
       value: '',
       isValid: false
+    },
+    price: {
+      value: '',
+      isValid: false
     }
   }, false);
 
@@ -58,6 +62,14 @@ const productSubmitHandler = event => {
         label="Quantity"
         validators={[VALIDATOR_REQUIRE()]}
         errorText="Please enter quantity."
+        onInput={inputHandler}
+      />
+      <Input
+        id="price"
+        element="input"
+        label="Price"
+        validators={[VALIDATOR_REQUIRE()]}
+        errorText="Please enter price."
         onInput={inputHandler}
       />
       <Button type="submit" disabled={!formState.isValid}>

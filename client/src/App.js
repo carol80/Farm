@@ -17,6 +17,7 @@ import UserProducts from './products/pages/UserProducts';
 import UpdateProduct from './products/pages/UpdateProduct';
 import Auth from './user/pages/Auth';
 import { AuthContext } from './shared/context/auth-context';
+import Footer from './shared/components/Navigation/Footer';
 
 
 // Components
@@ -77,6 +78,7 @@ const App = () => {
       <Router>
         <MainNavigation />
         <main>{routes}</main>
+        <Footer />
       </Router>
     </AuthContext.Provider>
   )

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Container, Row } from 'react-bootstrap';
+
 import Card from '../../shared/components/UIElements/Card';
 import ProductItem from './ProductItem';
 import Button from '../../shared/components/FormElements/Button';
@@ -16,7 +18,8 @@ const ProductList = props => {
         </div>
     }
     return (
-        <ul className="product-list">
+        <Container>
+            <Row>
             {props.items.map(product => 
                 <ProductItem 
                     key={product.id} 
@@ -25,10 +28,12 @@ const ProductList = props => {
                     title={product.title} 
                     description={product.description} 
                     quantity={product.quantity} 
+                    price={product.price}
                     creatorId={product.creator} 
                 />
             )}
-        </ul>
+            </Row>
+        </Container>
     )
 };
 
