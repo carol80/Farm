@@ -10,6 +10,7 @@ const app = express();
 
 app.use(bodyParser.json());
 
+app.use('/api/products', productsRoutes);
 app.use('/api/places', placesRoutes);
 app.use('/api/users', usersRoutes);
 
