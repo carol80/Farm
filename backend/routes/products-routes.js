@@ -31,9 +31,9 @@ router.patch(
       .isEmpty(),
     check('description').isLength({ min: 5 })
   ],
-  productsControllers.updatePlace
+  productsControllers.updateProduct
 );
 
-router.delete('/:pid', productsControllers.deletePlace);
+router.delete('/:pid', productsControllers.deleteProduct);
 
 module.exports = router;
