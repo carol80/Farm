@@ -37,10 +37,8 @@ async function getCoordsForAddress(address) {
       country = i['long_name']
     }
   }
-
+  console.log([coordinates, district, state, country])
   return [coordinates, district, state, country];
 }
 
 module.exports = getCoordsForAddress;
-
-console.log(getCoordsForAddress(`Thane`));

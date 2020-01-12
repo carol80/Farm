@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Input from '../../shared/components/FormElements/Input';
 import Button from '../../shared/components/FormElements/Button';
 import {
   VALIDATOR_REQUIRE,
-  VALIDATOR_MINLENGTH
+  VALIDATOR_MINLENGTH,
+  VALIDATOR_NUMBER
 } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
+import { Row, Col } from 'react-bootstrap';
 
 import './ProductForm.css';
 
-
 const NewProduct = () => {
+  const [unit, setUnit] = useState('Kilograms');
+
+  function handleChange(e){
+    setUnit(e.target.value);
+  };
+
   const [formState, inputHandler] = useForm(
   {
     title: {
@@ -32,10 +39,14 @@ const NewProduct = () => {
     }
   }, false);
 
-const productSubmitHandler = event => {
-  event.preventDefault();
-  console.log(formState.inputs); // send this to backend
-};
+  const productSubmitHandler = event => {
+    event.preventDefault();
+    console.log(formState.inputs);
+    console.log(unit); // send this to backend
+  };
+    
+  
+
 
   return (
     <form className="product-form" onSubmit={productSubmitHandler}>
@@ -56,20 +67,46 @@ const productSubmitHandler = event => {
         errorText="Please enter a valid description (at least 5 characters)."
         onInput={inputHandler}
       />
+      <Row>
+        <Col>
+          <Input
+            type="number"
+            id="quantity" 
+            element="input"
+            label="Quantity"
+            validators={[VALIDATOR_REQUIRE(), VALIDATOR_NUMBER()]}
+            errorText="Please enter valid quantity."
+            onInput={inputHandler}
+          />
+        </Col>
+        <Col>
+          <div className="form-control">
+            <label htmlFor="unit">Unit</label>
+            <select 
+              className="form-control" 
+              onChange={handleChange} 
+              value={unit}
+              style={{ 
+                marginTop: "0px", 
+                paddingTop: "0px",
+                paddingLeft: "0px",
+                backgroundColor: "#f8f8f8" 
+                }}>
+                <option value="Kilograms">Kilograms</option>
+                <option value="Litres">Litres</option>
+                <option value="Dozen">Dozen</option>
+            </select>
+          </div>
+        </Col>
+      </Row>
+      
       <Input
-        id="quantity"
-        element="input"
-        label="Quantity"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter quantity."
-        onInput={inputHandler}
-      />
-      <Input
+        type="number"
         id="price"
         element="input"
-        label="Price"
-        validators={[VALIDATOR_REQUIRE()]}
-        errorText="Please enter price."
+        label="Price in &#x20b9;"
+        validators={[VALIDATOR_REQUIRE(), VALIDATOR_NUMBER()]}
+        errorText="Please enter valid price."
         onInput={inputHandler}
       />
       <Button type="submit" disabled={!formState.isValid}>

@@ -82,3 +82,5 @@ Install Routers
 ### `npm install ---save react-transition-group`
 
 Install Transitions and Animations
+
+### `npm install react-widgets --save`

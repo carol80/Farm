@@ -16,6 +16,10 @@ const userSchema = new Schema({
     district: { type: String, required: true },
     state: { type: String, required: true },
     country: { type: String, required: true },
+    date: {
+        type: Date,
+        default: Date.now
+      },
     image: { type: String, required: true },
     places: [{ type: mongoose.Types.ObjectId, required: true, ref: 'Place'}],
     products: [{ type: mongoose.Types.ObjectId, required: true, ref: 'Product'}]

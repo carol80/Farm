@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 import { AuthContext } from '../../context/auth-context';
 import './NavLinks.css';
+import { Button } from 'react-bootstrap';
 
 const NavLinks = props => {
     const auth = useContext(AuthContext);
@@ -29,7 +30,7 @@ const NavLinks = props => {
             )}
             {auth.isLoggedIn && (
             <li>
-                <button onClick={auth.logout}>LOGOUT</button>
+                <Button variant="outline-success" onClick={auth.logout}>LOGOUT</Button>
             </li>
             )}
         </ul>  
