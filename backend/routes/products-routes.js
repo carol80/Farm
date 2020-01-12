@@ -16,7 +16,13 @@ router.post(
       .not()
       .isEmpty(),
     check('description').isLength({ min: 5 }),
-    check('address')
+    check('quantity')
+      .not()
+      .isEmpty(),
+    check('unit')
+      .not()
+      .isEmpty(),
+    check('price')
       .not()
       .isEmpty()
   ],

@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 
 const HttpError = require('../models/http-error');
+const getCoordsForAddress = require('../util/location');
 const User = require('../models/user');
 
 const getUsers = async (req, res, next) => {
@@ -24,7 +25,7 @@ const signup = async (req, res, next) => {
       new HttpError('Invalid inputs passed, please check your data.', 422)
     );
   }
-  const { name, email, password } = req.body;
+  const { name, email, password, address } = req.body;
 
   let existingUser
   try {
@@ -44,13 +45,26 @@ const signup = async (req, res, next) => {
     );
     return next(error);
   }
+
+  let coordinatesArray;
+  try {
+    coordinatesArray = await getCoordsForAddress(address);
+  } catch (error) {
+    return next(error);
+  }
   
   const createdUser = new User({
     name,
     email,
     image: 'https://live.staticflickr.com/7631/26849088292_36fc52ee90_b.jpg',
     password,
-    places: []
+    address,
+    location: coordinatesArray[0],
+    district: coordinatesArray[1],
+    state: coordinatesArray[2],
+    country: coordinatesArray[3],
+    places: [],
+    products: []
   });
 
   try {

@@ -3,7 +3,6 @@ const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
 
 const HttpError = require('../models/http-error');
-const getCoordsForAddress = require('../util/location');
 const Product = require('../models/product');
 const User = require('../models/user');
 
@@ -69,25 +68,20 @@ const createProduct = async (req, res, next) => {
     );
   }
 
-  const { title, description, address, creator } = req.body;
-
-  let coordinates;
-  try {
-    coordinates = await getCoordsForAddress(address);
-  } catch (error) {
-    return next(error);
-  }
+  const { title, description, quantity, unit, price, creator } = req.body;
 
   const createdProduct = new Product({
     title,
     description,
-    address,
-    location: coordinates,
     image:
       'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg',
+    quantity,
+    unit,
+    price,
     creator
   });
 
+  console.log(createdProduct);
   let user;
   try {
     user = await User.findById(creator);
