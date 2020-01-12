@@ -13,10 +13,15 @@ import { Row, Col } from 'react-bootstrap';
 import './ProductForm.css';
 
 const NewProduct = () => {
-  const [unit, setUnit] = useState('Kilograms');
+  const [unit, setUnit] = useState('Kilogram');
+  const [category, setCategory] = useState('Fruits and Vegetables');
 
-  function handleChange(e){
+  function handleUnitChange(e){
     setUnit(e.target.value);
+  };
+
+  function handleCategoryChange(e){
+    setCategory(e.target.value);
   };
 
   const [formState, inputHandler] = useForm(
@@ -42,12 +47,10 @@ const NewProduct = () => {
   const productSubmitHandler = event => {
     event.preventDefault();
     console.log(formState.inputs);
-    console.log(unit); // send this to backend
+    console.log(unit);
+    console.log(category); // send this to backend
   };
     
-  
-
-
   return (
     <form className="product-form" onSubmit={productSubmitHandler}>
       <Input
@@ -84,7 +87,7 @@ const NewProduct = () => {
             <label htmlFor="unit">Unit</label>
             <select 
               className="form-control" 
-              onChange={handleChange} 
+              onChange={handleUnitChange} 
               value={unit}
               style={{ 
                 marginTop: "0px", 
@@ -92,23 +95,47 @@ const NewProduct = () => {
                 paddingLeft: "0px",
                 backgroundColor: "#f8f8f8" 
                 }}>
-                <option value="Kilograms">Kilograms</option>
-                <option value="Litres">Litres</option>
+                <option value="Kilogram">Kilograms</option>
+                <option value="Litre">Litres</option>
                 <option value="Dozen">Dozen</option>
             </select>
           </div>
         </Col>
       </Row>
+      <Row>
+        <Col>
+        <div className="form-control">
+            <label htmlFor="category">Category</label>
+            <select 
+              className="form-control" 
+              onChange={handleCategoryChange} 
+              value={unit}
+              style={{ 
+                marginTop: "0px", 
+                paddingTop: "0px",
+                paddingLeft: "0px",
+                backgroundColor: "#f8f8f8" 
+                }}>
+                <option value="Fruits and Vegetables">Fruits and Vegetables</option>
+                <option value="Grocery">Grocery</option>
+                <option value="Dairy">Dairy</option>
+                <option value="Poultry">Poultry</option>
+            </select>
+          </div>      
+        </Col>
+        <Col>
+          <Input
+            type="number"
+            id="price"
+            element="input"
+            label={`Price(Rs) per ${unit}`}
+            validators={[VALIDATOR_REQUIRE(), VALIDATOR_NUMBER()]}
+            errorText="Please enter valid price."
+            onInput={inputHandler}
+          />
+        </Col>
+      </Row>
       
-      <Input
-        type="number"
-        id="price"
-        element="input"
-        label="Price in &#x20b9;"
-        validators={[VALIDATOR_REQUIRE(), VALIDATOR_NUMBER()]}
-        errorText="Please enter valid price."
-        onInput={inputHandler}
-      />
       <Button type="submit" disabled={!formState.isValid}>
         ADD PRODUCT
       </Button>

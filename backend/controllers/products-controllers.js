@@ -68,7 +68,7 @@ const createProduct = async (req, res, next) => {
     );
   }
 
-  const { title, description, quantity, unit, price, creator } = req.body;
+  const { title, description, quantity, unit, price, category, creator } = req.body;
 
   const createdProduct = new Product({
     title,
@@ -78,6 +78,7 @@ const createProduct = async (req, res, next) => {
     quantity,
     unit,
     price,
+    category,
     creator
   });
 

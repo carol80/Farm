@@ -35,15 +35,20 @@ const Auth = () => {
       setFormData(
         {
           ...formState.inputs,
-          name: undefined
+          name: undefined,
+          address: undefined
         },
-        formState.inputs.email.isValid && formState.inputs.password.isValid
+        formState.inputs.email.isValid && formState.inputs.password.isValid && formState.inputs.address.isValid
       );
     } else {
       setFormData(
         {
           ...formState.inputs,
           name: {
+            value: '',
+            isValid: false
+          },
+          address: {
             value: '',
             isValid: false
           }
@@ -70,7 +75,7 @@ const Auth = () => {
             element="input"
             id="name"
             type="text"
-            label="Your Name"
+            label="Name"
             validators={[VALIDATOR_REQUIRE()]}
             errorText="Please enter a name."
             onInput={inputHandler}
@@ -94,6 +99,16 @@ const Auth = () => {
           errorText="Please enter a valid password, at least 5 characters."
           onInput={inputHandler}
         />
+        {!isLoginMode && (
+          <Input
+            id="address"
+            element="textarea"
+            label="Address"
+            validators={[VALIDATOR_MINLENGTH(5)]}
+            errorText="Please enter a valid address (at least 5 characters)."
+            onInput={inputHandler}
+          />
+        )}
         <Button type="submit" disabled={!formState.isValid}>
           {isLoginMode ? 'LOGIN' : 'SIGNUP'}
         </Button>

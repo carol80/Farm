@@ -24,6 +24,9 @@ router.post(
       .isEmpty(),
     check('price')
       .not()
+      .isEmpty(),
+    check('category')
+      .not()
       .isEmpty()
   ],
   productsControllers.createProduct

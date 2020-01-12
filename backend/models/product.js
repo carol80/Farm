@@ -10,6 +10,7 @@ const productSchema = new Schema({
     quantity: { type: String, required: true },
     unit: { type: String, required: true },
     price: { type: Number, required: true},
+    category: { type: String, required: true },
     creator: { type: mongoose.Types.ObjectId, required: true, ref: 'User'},
     transactions: []
 });
