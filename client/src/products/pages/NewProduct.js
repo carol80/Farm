@@ -56,9 +56,6 @@ const NewProduct = () => {
 
   const productSubmitHandler = async event => {
     event.preventDefault();
-    console.log(formState.inputs);
-    console.log(unit);
-    console.log(category); // send this to backend
     try {
       await sendRequest(
         'http://localhost:5000/api/products',

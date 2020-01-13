@@ -24,12 +24,15 @@ const ProductList = props => {
                 <ProductItem 
                     key={product.id} 
                     id={product.id} 
-                    image={product.imageUrl} 
+                    image={product.image} 
                     title={product.title} 
                     description={product.description} 
-                    quantity={product.quantity} 
+                    quantity={product.quantity}
+                    unit={product.unit} 
                     price={product.price}
+                    category={product.category}
                     creatorId={product.creator} 
+                    onDelete={props.onDeleteProduct}
                 />
             )}
             </Row>

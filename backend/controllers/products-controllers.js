@@ -124,7 +124,7 @@ const updateProduct = async (req, res, next) => {
     );
   }
 
-  const { title, description } = req.body;
+  const { title, description, quantity, unit, price, category } = req.body;
   const productId = req.params.pid;
 
   let product;
@@ -140,6 +140,10 @@ const updateProduct = async (req, res, next) => {
 
   product.title = title;
   product.description = description;
+  product.quantity = quantity;
+  product.unit = unit;
+  product.price = price;
+  product.category = category;
 
   try {
     await product.save();

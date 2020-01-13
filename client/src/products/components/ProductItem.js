@@ -4,27 +4,45 @@ import { Link } from 'react-router-dom';
 import Button from '../../shared/components/FormElements/Button';
 import Modal from 'react-bootstrap/Modal';
 import { AuthContext } from '../../shared/context/auth-context';
-
+import { useHttpClient } from '../../shared/hooks/http-hook';
+import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
+import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 
 import veg from './veg.png';
-// import nonveg from './nonveg.png';
+import nonveg from './nonveg.png';
 
 import './ProductItem.css';
 
 const ProductItem = props => {
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const auth = useContext(AuthContext);
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);  
+    const handleShow = () => setShow(true);
 
-    const confirmDelete = () => {
+    var foodType;
+    if (props.category === "Poultry") {
+        foodType = <img src={nonveg} alt="Food Type" />
+    } else {
+        foodType = <img src={veg} alt="Food Type" />
+    }
+    const confirmDelete = async () => {
         setShow(false);
-        console.log("DELETING..");
+        try {
+            await sendRequest(
+                `http://localhost:5000/api/products/${props.id}`,
+                'DELETE'
+            );
+            props.onDelete(props.id);
+        } catch (err) {}
     }
 
     return (
+        <React.Fragment>
+            <ErrorModal error={error} onClear={clearError} />
             <div className="col-12 col-sm-8 col-md-6 col-lg-4 product__card">
+                {isLoading  && <LoadingSpinner asOverlay />}
                 <div className="card border-0 shadow">
                     <div className="card-body rounded-bottom">
                         <div className="view ">
@@ -33,20 +51,20 @@ const ProductItem = props => {
                                 <div className="mask rgba-white-slight"></div>
                             </a>
                         </div>
-                            <img src={veg} alt="Food Type" />
+                            {foodType}
                             <h4 className="card-text small mb-2 d-block">
-                                Fruits & Vegetables
+                                {props.category}
                             </h4>
                             <Link className="h5 card-title" style={{color: 'black'}} to="./id">{props.title}</Link>
                             <hr></hr>
                             <ul className="list-unstyled d-flex justify-content-between mb-3 text-center small">
                                 <li className="price">
                                     <p className="mb-1 font-weight-bold text-dark">Price</p>
-                                    <span className="amount">Rs {props.price}/kg</span> 
+                                    <span className="amount">Rs {props.price}/{props.unit}</span> 
                                 </li>
                                 <li className="quantity">
                                     <p className="mb-1 font-weight-bold text-dark">Quantity left</p>
-                                    <span className="amount">{props.quantity} KG</span> 
+                                    <span className="amount">{props.quantity} {props.unit}</span> 
                                 </li>
                                 <li className="days">
                                     <p className="mb-1 font-weight-bold text-dark">Days Left</p>
@@ -59,12 +77,12 @@ const ProductItem = props => {
                                     <Button inverse>VIEW</Button>
                                 </li>
                                 <li className="edit">
-                                    {auth.isLoggedIn && (
+                                    {auth.userId === props.creatorId && (
                                     <Button to={`/products/${props.id}`}><i className="far fa-edit"></i></Button>
                                     )}
                                 </li>
                                 <li className="delete">
-                                    {auth.isLoggedIn && (
+                                    {auth.userId === props.creatorId && (
                                     <Button danger onClick={handleShow}><i className="fas fa-trash-alt"></i></Button>
                                     )}
                                 </li>
@@ -86,6 +104,7 @@ const ProductItem = props => {
                     </div>
                 </div>  
             </div>
+        </React.Fragment>
     );
 };
 
