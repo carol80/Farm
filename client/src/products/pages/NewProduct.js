@@ -69,12 +69,14 @@ const NewProduct = () => {
       formData.append('unit', unit);
       formData.append('price', formState.inputs.price.value);  
       formData.append('category', category);
-      formData.append('creator', auth.userId);
       formData.append('image', formState.inputs.image.value);
       await sendRequest(
         'http://localhost:5000/api/products',
         'POST',
-        formData
+        formData,
+        {
+          Authorization: 'Bearer ' + auth.token
+        }
       );
       history.push('/');
     } catch (err) {}

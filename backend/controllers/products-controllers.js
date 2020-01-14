@@ -70,7 +70,7 @@ const createProduct = async (req, res, next) => {
     );
   }
 
-  const { title, description, quantity, unit, price, category, creator } = req.body;
+  const { title, description, quantity, unit, price, category } = req.body;
 
   const createdProduct = new Product({
     title,
@@ -80,13 +80,13 @@ const createProduct = async (req, res, next) => {
     unit,
     price,
     category,
-    creator
+    creator: req.userData.userId
   });
 
   console.log(createdProduct);
   let user;
   try {
-    user = await User.findById(creator);
+    user = await User.findById(req.userData.userId);
   } catch (err) {
     const error = new HttpError('Creating product failed, please try again', 500);
     return next(error);
@@ -139,6 +139,14 @@ const updateProduct = async (req, res, next) => {
     return next(error);
   }
 
+  if (product.creator.toString() !== req.userData.userId) {
+    const error = new HttpError(
+      'You are not allowed to edit this product.',
+      401
+    );
+    return next(error);
+  }
+
   product.title = title;
   product.description = description;
   product.quantity = quantity;
@@ -173,6 +181,14 @@ const deleteProduct = async (req, res, next) => {
 
   if (!product) {
     const error = new HttpError('Could not find product for this id.', 404);
+    return next(error);
+  }
+
+  if (product.creator.id !== req.userData.userId) {
+    const error = new HttpError(
+      'You are not allowed to delete this product.',
+      401
+    );
     return next(error);
   }
 

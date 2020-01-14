@@ -7,6 +7,7 @@ import { AuthContext } from '../../shared/context/auth-context';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
+import ProductModal from '../../shared/components/UIElements/ProductModal';
 
 import veg from './veg.png';
 import nonveg from './nonveg.png';
@@ -21,6 +22,11 @@ const ProductItem = props => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const [showDescription, setShowDescription] = useState(false);
+
+    const handleCloseDescription = () => setShowDescription(false);
+    const handleShowDescription = () => setShowDescription(true);
+
     var foodType;
     if (props.category === "Poultry") {
         foodType = <img src={nonveg} alt="Food Type" />
@@ -32,7 +38,11 @@ const ProductItem = props => {
         try {
             await sendRequest(
                 `http://localhost:5000/api/products/${props.id}`,
-                'DELETE'
+                'DELETE',
+                null,
+                {
+                    Authorization: 'Bearer ' + auth.token
+                }
             );
             props.onDelete(props.id);
         } catch (err) {}
@@ -41,6 +51,18 @@ const ProductItem = props => {
     return (
         <React.Fragment>
             <ErrorModal error={error} onClear={clearError} />
+            <ProductModal 
+                title={props.title}
+                description={props.description}
+                quantity={props.quantity}
+                foodType={foodType}
+                unit={props.unit}
+                price={props.price}
+                category={props.category}
+                image={props.image}
+                show={showDescription} 
+                onHide={handleCloseDescription} 
+            />
             <div className="col-12 col-sm-8 col-md-6 col-lg-4 product__card">
                 {isLoading  && <LoadingSpinner asOverlay />}
                 <div className="card border-0 shadow">
@@ -60,7 +82,7 @@ const ProductItem = props => {
                             <ul className="list-unstyled d-flex justify-content-between mb-3 text-center small">
                                 <li className="price">
                                     <p className="mb-1 font-weight-bold text-dark">Price</p>
-                                    <span className="amount">Rs {props.price}/{props.unit}</span> 
+                                    <span className="amount">Rs {props.price} / {props.unit}</span> 
                                 </li>
                                 <li className="quantity">
                                     <p className="mb-1 font-weight-bold text-dark">Quantity left</p>
@@ -74,7 +96,7 @@ const ProductItem = props => {
                                     
                             <ul className="list-unstyled d-flex justify-content-between mb-3 text-center small">
                                 <li className="view">
-                                    <Button inverse>VIEW</Button>
+                                    <Button inverse onClick={handleShowDescription}>VIEW</Button>
                                 </li>
                                 <li className="edit">
                                     {auth.userId === props.creatorId && (

@@ -7,7 +7,9 @@ import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import {
   VALIDATOR_EMAIL,
+  VALIDATOR_NUMBER,
   VALIDATOR_MINLENGTH,
+  VALIDATOR_MAXLENGTH,
   VALIDATOR_REQUIRE
 } from '../../shared/util/validators';
 import { useForm } from '../../shared/hooks/form-hook';
@@ -43,7 +45,8 @@ const Auth = () => {
           ...formState.inputs,
           name: undefined,
           address: undefined,
-          image: undefined
+          image: undefined,
+          phone: undefined
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid && formState.inputs.address.isValid
       );
@@ -60,6 +63,10 @@ const Auth = () => {
             isValid: false
           },
           image: {
+            value: null,
+            isValid: false
+          },
+          phone: {
             value: null,
             isValid: false
           }
@@ -87,7 +94,7 @@ const Auth = () => {
               'Content-Type': 'application/json'
           }
         );   
-        auth.login(responseData.userId);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {
 
       }
@@ -97,14 +104,15 @@ const Auth = () => {
         formData.append('name', formState.inputs.name.value);
         formData.append('email', formState.inputs.email.value); 
         formData.append('password', formState.inputs.password.value); 
-        formData.append('address', formState.inputs.address.value);  
+        formData.append('address', formState.inputs.address.value); 
+        formData.append('phone', formState.inputs.phone.value); 
         formData.append('image', formState.inputs.image.value);   
         const responseData = await sendRequest(
             'http://localhost:5000/api/users/signup', 
             'POST',
             formData
           );
-        auth.login(responseData.userId);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {}
     }
   };
@@ -128,13 +136,6 @@ const Auth = () => {
               onInput={inputHandler}
             />
           )}
-          {!isLoginMode && (
-            <ImageUpload 
-              center id="image" 
-              onInput={inputHandler} 
-              errorText="Please provide an image"
-            />
-          )}
           <Input
             element="input"
             id="email"
@@ -155,12 +156,32 @@ const Auth = () => {
           />
           {!isLoginMode && (
             <Input
+              element="input"
+              id="phone"
+              type="tel"
+              label="Mobile"
+              pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+              validators={[VALIDATOR_NUMBER(), VALIDATOR_MINLENGTH(10), VALIDATOR_MAXLENGTH(10)]}
+              errorText="Please enter a valid Mobile number"
+              onInput={inputHandler}
+            />
+          )}
+          {!isLoginMode && (
+            <Input
               id="address"
               element="textarea"
               label="Address"
               validators={[VALIDATOR_MINLENGTH(5)]}
               errorText="Please enter a valid address (at least 5 characters)."
               onInput={inputHandler}
+            />
+          )}
+
+          {!isLoginMode && (
+            <ImageUpload 
+              center id="image" 
+              onInput={inputHandler} 
+              errorText="Please provide an image"
             />
           )}
           <Button type="submit" disabled={!formState.isValid}>

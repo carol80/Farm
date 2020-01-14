@@ -28,7 +28,7 @@ const signup = async (req, res, next) => {
     );
   }
 
-  const { name, email, password, address } = req.body;
+  const { name, email, password, address, phone } = req.body;
 
   let existingUser
   try {
@@ -44,6 +44,16 @@ const signup = async (req, res, next) => {
   if (existingUser) {
     const error = new HttpError(
       'User exists already, please login instead.',
+      422
+    );
+    return next(error);
+  }
+
+  var isnum = /^\d+$/.test(phone);
+
+  if (phone.length !== 10 || isnum == false) {
+    const error = new HttpError(
+      'Please enter a valid mobile number',
       422
     );
     return next(error);
@@ -89,6 +99,7 @@ const signup = async (req, res, next) => {
     image: req.file.path,
     password: hashedPassword,
     address,
+    phone,
     location: coordinatesArray[0],
     district: coordinatesArray[1],
     state: coordinatesArray[2],
@@ -149,7 +160,7 @@ const login = async (req, res, next) => {
   if (!existingUser) {
     const error = new HttpError(
       'Invalid credentials, could not log you in.',
-      401
+      403
     );
     return next(error);
   }

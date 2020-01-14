@@ -22,6 +22,9 @@ router.post(
     check('address')
       .not()
       .isEmpty(),
+    check('phone')
+      .not()
+      .isEmpty()
   ],
   usersController.signup
 );
