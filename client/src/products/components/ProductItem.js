@@ -46,7 +46,7 @@ const ProductItem = props => {
                 <div className="card border-0 shadow">
                     <div className="card-body rounded-bottom">
                         <div className="view ">
-                            <img className="card-img-top rounded-top" src={props.image} alt={props.title}/>
+                            <img className="card-img-top rounded-top" src={`http://localhost:5000/${props.image}`} alt={props.title}/>
                             <a href="#!">
                                 <div className="mask rgba-white-slight"></div>
                             </a>

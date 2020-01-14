@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const uuid = require('uuid/v4');
 const { validationResult } = require('express-validator');
 const mongoose = require('mongoose');
@@ -73,8 +75,7 @@ const createProduct = async (req, res, next) => {
   const createdProduct = new Product({
     title,
     description,
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Empire_State_Building_%28aerial_view%29.jpg/400px-Empire_State_Building_%28aerial_view%29.jpg',
+    image: req.file.path,
     quantity,
     unit,
     price,
@@ -124,7 +125,7 @@ const updateProduct = async (req, res, next) => {
     );
   }
 
-  const { title, description, quantity, unit, price, category } = req.body;
+  const { title, description, quantity, price } = req.body;
   const productId = req.params.pid;
 
   let product;
@@ -141,9 +142,7 @@ const updateProduct = async (req, res, next) => {
   product.title = title;
   product.description = description;
   product.quantity = quantity;
-  product.unit = unit;
   product.price = price;
-  product.category = category;
 
   try {
     await product.save();
@@ -177,6 +176,8 @@ const deleteProduct = async (req, res, next) => {
     return next(error);
   }
 
+  const imagePath = product.image;
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -191,6 +192,10 @@ const deleteProduct = async (req, res, next) => {
     );
     return next(error);
   }
+
+  fs.unlink(imagePath, err => {
+    console.log(err);
+  });
 
   res.status(200).json({ message: 'Deleted product.' });
 };

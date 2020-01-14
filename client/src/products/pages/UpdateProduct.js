@@ -22,18 +22,8 @@ const UpdateProduct = () => {
     const auth = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const [loadedProduct, setLoadedProduct] = useState();
-    const [unit, setUnit] = useState('Kilogram');
-    const [category, setCategory] = useState('Fruits and Vegetables');
     const productId = useParams().productId;
     const history = useHistory();
-  
-    function handleUnitChange(e){
-      setUnit(e.target.value);
-    };
-  
-    function handleCategoryChange(e){
-      setCategory(e.target.value);
-    };
 
     const [formState, inputHandler, setFormData] = useForm(
       {
@@ -85,8 +75,6 @@ const UpdateProduct = () => {
                   },
                   true
                 );
-                setUnit(responseData.unit);
-                setCategory(responseData.category);
             } catch (err) {}
         };
         fetchProducts();
@@ -94,7 +82,6 @@ const UpdateProduct = () => {
   
     const productUpdateSubmitHandler = async event => {
       event.preventDefault();
-      console.log(unit);
       try {
         await sendRequest(
           `http://localhost:5000/api/products/${productId}`,
@@ -103,9 +90,7 @@ const UpdateProduct = () => {
             title: formState.inputs.title.value,
             description: formState.inputs.description.value,
             quantity: formState.inputs.quantity.value,
-            unit: unit,
-            price: formState.inputs.price.value,
-            category: category
+            price: formState.inputs.price.value
           }),
           {
             'Content-Type': 'application/json'
@@ -173,58 +158,17 @@ const UpdateProduct = () => {
               />
             </Col>
             <Col>
-              <div className="form-control">
-                <label htmlFor="unit">Unit</label>
-                <select 
-                  className="form-control" 
-                  onChange={handleUnitChange} 
-                  value={unit}
-                  style={{ 
-                    marginTop: "0px", 
-                    paddingTop: "0px",
-                    paddingLeft: "0px",
-                    backgroundColor: "#f8f8f8" 
-                    }}>
-                    <option value="Kilogram">Kilograms</option>
-                    <option value="Litre">Litres</option>
-                    <option value="Dozen">Dozen</option>
-                </select>
-              </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-            <div className="form-control">
-                <label htmlFor="category">Category</label>
-                <select 
-                  className="form-control" 
-                  onChange={handleCategoryChange} 
-                  value={category}
-                  style={{ 
-                    marginTop: "0px", 
-                    paddingTop: "0px",
-                    paddingLeft: "0px",
-                    backgroundColor: "#f8f8f8" 
-                    }}>
-                    <option value="Fruits and Vegetables">Fruits and Vegetables</option>
-                    <option value="Grocery">Grocery</option>
-                    <option value="Dairy">Dairy</option>
-                    <option value="Poultry">Poultry</option>
-                </select>
-              </div>      
-            </Col>
-            <Col>
               <Input
-                type="number"
-                id="price"
-                element="input"
-                label={`Price(Rs) per ${unit}`}
-                validators={[VALIDATOR_REQUIRE(), VALIDATOR_NUMBER()]}
-                errorText="Please enter valid price."
-                onInput={inputHandler}
-                initialValue={loadedProduct.price}
-                initialValid={true}
-              />
+                  type="number"
+                  id="price"
+                  element="input"
+                  label={`Price(Rs) per ${loadedProduct.unit}`}
+                  validators={[VALIDATOR_REQUIRE(), VALIDATOR_NUMBER()]}
+                  errorText="Please enter valid price."
+                  onInput={inputHandler}
+                  initialValue={loadedProduct.price}
+                  initialValid={true}
+                />
             </Col>
           </Row>
           <Button type="submit" disabled={!formState.isValid}>

@@ -11,6 +11,7 @@ import {
 import { useForm } from '../../shared/hooks/form-hook';
 import { useHttpClient } from '../../shared/hooks/http-hook';
 import { AuthContext } from '../../shared/context/auth-context';
+import ImageUpload from '../../shared/components/FormElements/ImageUpload';
 import LoadingSpinner from '../../shared/components/UIElements/LoadingSpinner';
 import ErrorModal from '../../shared/components/UIElements/ErrorModal';
 import { Row, Col } from 'react-bootstrap';
@@ -42,6 +43,10 @@ const NewProduct = () => {
       value: '',
       isValid: false
     },
+    image: {
+      value: null,
+      isValid: false
+    },
     quantity: {
       value: '',
       isValid: false
@@ -57,19 +62,19 @@ const NewProduct = () => {
   const productSubmitHandler = async event => {
     event.preventDefault();
     try {
+      const formData = new FormData(); 
+      formData.append('title', formState.inputs.title.value);
+      formData.append('description', formState.inputs.description.value); 
+      formData.append('quantity', formState.inputs.quantity.value); 
+      formData.append('unit', unit);
+      formData.append('price', formState.inputs.price.value);  
+      formData.append('category', category);
+      formData.append('creator', auth.userId);
+      formData.append('image', formState.inputs.image.value);
       await sendRequest(
         'http://localhost:5000/api/products',
         'POST',
-        JSON.stringify({
-          title: formState.inputs.title.value,
-          description: formState.inputs.description.value,
-          quantity: formState.inputs.quantity.value,
-          unit: unit,
-          price: formState.inputs.price.value,
-          category: category,
-          creator: auth.userId
-        }),
-        { 'Content-Type': 'application/json' }
+        formData
       );
       history.push('/');
     } catch (err) {}
@@ -96,6 +101,11 @@ const NewProduct = () => {
           validators={[VALIDATOR_MINLENGTH(5)]}
           errorText="Please enter a valid description (at least 5 characters)."
           onInput={inputHandler}
+        />
+        <ImageUpload 
+          id="image" 
+          onInput={inputHandler} 
+          errorText="Please provide an image" 
         />
         <Row>
           <Col>
