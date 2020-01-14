@@ -1,14 +1,17 @@
 const express = require('express');
 const { check } = require('express-validator');
-const fileUpload = require('../middleware/file-upload');
 
 const productsControllers = require('../controllers/products-controllers');
+const fileUpload = require('../middleware/file-upload');
+const checkAuth = require('../middleware/check-auth');
 
 const router = express.Router();
 
 router.get('/:pid', productsControllers.getProductById);
 
 router.get('/user/:uid', productsControllers.getProductsByUserId);
+
+router.use(checkAuth);
 
 router.post(
   '/',
