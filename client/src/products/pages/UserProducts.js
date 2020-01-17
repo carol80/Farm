@@ -19,6 +19,7 @@ const UserProducts = () => {
                     `http://localhost:5000/api/products/user/${userId}`
                 );
                 setLoadedProducts(responseData.products);
+                console.log(responseData.products);
             } catch (err) {}
         };
         fetchProducts();

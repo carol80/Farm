@@ -48,13 +48,13 @@ const getProductsByUserId = async (req, res, next) => {
     return next(error);
   }
 
-  // if (!products || products.length === 0) {
   if (!userWithProducts || userWithProducts.products.length === 0) {
     return next(
       new HttpError('Could not find products for the provided user id.', 404)
     );
   }
-
+  console.log(userWithProducts);
+  
   res.json({
     products: userWithProducts.products.map(product =>
       product.toObject({ getters: true })
@@ -72,18 +72,6 @@ const createProduct = async (req, res, next) => {
 
   const { title, description, quantity, unit, price, category } = req.body;
 
-  const createdProduct = new Product({
-    title,
-    description,
-    image: req.file.path,
-    quantity,
-    unit,
-    price,
-    category,
-    creator: req.userData.userId
-  });
-
-  console.log(createdProduct);
   let user;
   try {
     user = await User.findById(req.userData.userId);
@@ -97,7 +85,19 @@ const createProduct = async (req, res, next) => {
     return next(error);
   }
 
-  console.log(user);
+  const createdProduct = new Product({
+    title,
+    description,
+    image: req.file.path,
+    quantity,
+    unit,
+    price,
+    category,
+    state: user.state,
+    district: user.district,
+    location: user.location,
+    creator: req.userData.userId
+  });
 
   try {
     const sess = await mongoose.startSession();
